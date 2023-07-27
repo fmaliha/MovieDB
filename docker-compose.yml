@@ -1,0 +1,37 @@
+
+version : '3'
+services:
+  movie-mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./docker/mysql/schema.sql:/docker-entrypoint-initdb.d/1.sql"
+  app:
+    build: 
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    volumes:
+      - ./app:/app
+    container_name: express
+    restart: always
+    ports:
+      - 8080:8080
+    command: nodemon server.js
+    depends_on:
+      - movie-mysql
+  client:
+    build: 
+      context: .
+      dockerfile: ./docker/client/Dockerfile
+    volumes:
+      - ./client:/client
+    container_name: react
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - app
