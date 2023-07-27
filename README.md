@@ -1,2 +1,2 @@
 # MovieDB
-With MongoDB , Express JS, React JS , Node JS
+With MySQL , Express JS, React JS , Node JS
